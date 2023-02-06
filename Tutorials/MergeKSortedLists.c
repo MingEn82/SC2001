@@ -81,8 +81,8 @@ struct Node * mergeKSortedLists(struct Node lists[], int size)
         
         if (head == NULL)
         {
-            head = malloc(sizeof(struct Node));
-            ptr = malloc(sizeof(struct Node));
+            head = (struct Node *) malloc(sizeof(struct Node));
+            ptr = (struct Node *) malloc(sizeof(struct Node));
             head = ptr = minNode;
         }
         else

@@ -12,19 +12,19 @@ void swap(int array[], int a, int b) {
 };
 
 // minimum Heap
-struct Node {
+struct PQNode {
     int dest;
     int weight;
 };
 
-void swapEdge(struct Node *PQ, int a, int b)
+void swapEdge(struct PQNode *PQ, int a, int b)
 {
-    struct Node temp = PQ[a];
+    struct PQNode temp = PQ[a];
     PQ[a] = PQ[b];
     PQ[b] = temp;
 }
 
-void fixHeap(struct Node *PQ, int n, int i)
+void fixHeap(struct PQNode *PQ, int n, int i)
 {
     int left = 2 * i + 1;
     int right = 2 * i + 2;
@@ -42,7 +42,7 @@ void fixHeap(struct Node *PQ, int n, int i)
     }
 }
 
-void heapify(struct Node *PQ, int n, int i)
+void heapify(struct PQNode *PQ, int n, int i)
 {
     int left = 2 * i + 1;
     int right = 2 * i + 2;
@@ -58,9 +58,9 @@ void heapify(struct Node *PQ, int n, int i)
 }
 
 // insert node into minimum heap
-void insert(struct Node *PQ, int dest, int totalWeight)
+void insert(struct PQNode *PQ, int dest, int totalWeight)
 {
-    struct Node new;
+    struct PQNode new;
     new.dest = dest;
     new.weight = totalWeight;
     PQ[PQSize] = new;
@@ -71,7 +71,7 @@ void insert(struct Node *PQ, int dest, int totalWeight)
 // Get minimum node in priority queue
 // which is the first element in minimum heap
 // need to regenerate minimum heap after extracting
-struct Node extractMin(struct Node *PQ)
+struct PQNode extractMin(struct PQNode *PQ)
 {
     swapEdge(PQ, 0, --PQSize);
     heapify(PQ, PQSize, 0);
@@ -164,8 +164,9 @@ void printGraph(struct Graph* graph, int vertices)
 }
 
 int * dijkstra(struct Graph *g, int src) {
-    struct Node PQ[500];
-    int visited[VERTICES], dist[VERTICES];
+    struct PQNode PQ[500];
+    int visited[VERTICES];
+    static int dist[VERTICES];
     int i, idx, newDist;
 
     for (i = 0; i < VERTICES; i++) {
@@ -176,7 +177,7 @@ int * dijkstra(struct Graph *g, int src) {
     dist[src] = 0;
     insert(PQ, src, 0);
     while (PQSize > 0) {
-        struct Node pqMin = extractMin(PQ);
+        struct PQNode pqMin = extractMin(PQ);
         idx = pqMin.dest;
         visited[idx] = 1;
         struct AdjListNode *ptr = g->array[idx].head;
@@ -194,6 +195,8 @@ int * dijkstra(struct Graph *g, int src) {
         printf("%d: %d | ", i, dist[i]);
     }
     printf("\n");
+
+    return dist;
 }
 
 int main()

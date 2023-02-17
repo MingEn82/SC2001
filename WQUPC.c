@@ -31,11 +31,12 @@ void initialiseSize(int sz[], int size)
     }
 }
 
-// Returns the root of p
+// Returns the root of p with single pass PC
 // O(logN) time complexity in the worst case
 // Depth of any node x is at most log2(N)
-int find(int id[], int p)
+int findSinglePass(int id[], int p)
 {
+    // Single Pass Variant
     while (p != id[p])
     {
         // Make every other node in path point to its grandparent
@@ -43,6 +44,32 @@ int find(int id[], int p)
         p = id[p];
     }
     return p;
+}
+
+// Returns the root of p with double pass PC
+// O(logN) time complexity in the worst case
+// Depth of any node x is at most log2(N)
+int findDoublePass(int id[], int p)
+{
+    // Double Pass Variant
+    int root = p;
+    while (root != id[root])
+    {
+        root = id[root];
+    }
+    int pRoot;
+    while (p != root)
+    {
+        pRoot = id[p];
+        id[p] = root;
+        p = pRoot;
+    }
+}
+
+int find(int id[], int p)
+{
+    // return findSinglePass(id, p);
+    return findDoublePass(id, p);
 }
 
 
